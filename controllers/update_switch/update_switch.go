@@ -17,7 +17,7 @@ import (
 type UpdateSwitch struct {
 	Request    *http.Request
 	Client     switch_operations.Switch
-	UpdateType string
+	SwitchModel string
 	ImageURL   string
 }
 
@@ -38,7 +38,7 @@ func MiddleWare(r *http.Request, body *models.UpdateSwitch) middleware.Responder
 	return &UpdateSwitch{
 		Request:    r,
 		Client:     client,
-		UpdateType: *body.UpdateType,
+		SwitchModel: *body.SwitchModel,
 		ImageURL:   *body.ImageURL,
 	}
 }
@@ -58,7 +58,7 @@ func (c *UpdateSwitch) notSupported(rw http.ResponseWriter, rp runtime.Producer)
 }
 
 func (c *UpdateSwitch) postUpdateSwitch(rw http.ResponseWriter, rp runtime.Producer) {
-	err := c.Client.Update(c.UpdateType, c.ImageURL)
+	err := c.Client.Update(c.SwitchModel, c.ImageURL)
 	if err != nil {
 		rp.Produce(rw, fmt.Sprintf("failed to update switch: %+v", err))
 		return
